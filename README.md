@@ -1,57 +1,62 @@
-# NuID :: Proving Ground
+<p align="right"><a href="https://nuid.io"><img src="https://nuid.io/svg/logo.svg" width="20%"></a></p>
 
-The NuID Proving Ground provides a docker image test environment for open core
-libraries to interact with NuID utilities like [`nuid.zk`](https://github.com/nuid/zk).
+# NuID :: `node-cli`
+
+The NuID `node-cli` provides an npm package at `@nuid/cli` with CLI interfaces
+to NuID Open Core libraries like [`nuid.zk`](https://github.com/nuid/zk). We
+expect the interface to the CLI to grow over time, so all commands are organized
+with subcommands to invoke the proper functions.
 
 ## Install
 
-You'll need the [Docker CLI](https://docs.docker.com/get-docker/) installed.
-Then build the image and run it.
-
 ```sh
-make build run
+npm install @nuid/cli
+# or
+yarn add @nuid/cli
 ```
 
 ## Usage
 
-The proving ground image is useful as an early stage in a multi-stage docker
-build. For any open-core library we are building that needs access to the
-`nuid.zk` js lib.
+Since argument finagling is problematic on the shell, we require that you
+JSON-encode the argument vector for any given command you are invoking.
 
-Below is an example from the [`nuid/sdk-ruby`](https://github.com/nuid/sdk-ruby)
-Dockerfile.
+``` sh
+# Or just install it globally with `npm i -g @nuid/cli`
+export PATH=$PATH:./node_modules/.bin
 
-```Dockerfile
-# Bring in the proving ground
-FROM nuid/proving-ground:latest AS nuid-pg
+# Print a list of top-level commands
+nuid-cli --help
 
-# Now add the stage to support testing your library
-FROM ruby:2.7-alpine
-LABEL maintainer="NuID Developers <dev@nuid.io>"
-WORKDIR /nuid/sdk-ruby
-ADD . .
-RUN apk add git
-RUN gem install bundler
-RUN bundle install
+# Print a list of available sub-commands for zk
+nuid-cli zk --help
 
-# Be sure to grab the artifacts from the proving ground image
-COPY --from=nuid-pg /usr/local/bin/* /usr/local/bin/
-RUN rm /usr/local/bin/docker-entrypoint.sh
-COPY --from=nuid-pg /usr/bin/nuid-pg /usr/bin/nuid-pg
-COPY --from=nuid-pg /nuid /nuid
-
-# etc
-ENTRYPOINT "rake test"
+# Returns a JSON-encoded verified credential
+# Note the JSON-encoded argument vector
+nuid-cli zk verifiableFromSecret '["my secret"]'
 ```
 
-## Managing the Docker Image
+With this CLI available, you can now write full integration tests with NuID
+crypto material in languages other than JavaScript or Clojure. For example,
+in [Ruby](https://github.com/NuID/sdk-ruby):
 
-```sh
-make build  # Build the docker image
-make clean  # Analogous to make stop rm rmi
-make rm     # Remove the container
-make rmi    # Remove the image
-make run    # Start the container
-make shell  # Open a shell on the running container
-make stop   # Stop the running container
+``` ruby
+require "nuid-sdk"
+
+class MyApiTest < ::Minitest::Test
+  def test_credential_create
+    api = ::NuID::SDK::API::Auth.new(ENV['NUID_API_KEY'])
+    verified = zk('verifiableFromSecret', 'super secret password')
+    res = api.credential_create(verified)
+    assert_equal(201, res.code)
+    nuid = res.parsed_response['nu/id']
+    credential = res.parsed_response['nuid/credential']
+    # ...
+  end
+  
+  private
+  
+  def zk(command, *args)
+    JSON.parse(%x{./node_modules/.bin/nuid-cli zk #{command} '#{args.to_json}'})
+  end
+end
 ```

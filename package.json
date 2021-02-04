@@ -1,21 +1,20 @@
 {
-  "name": "@nuid/proving-ground",
+  "name": "@nuid/cli",
   "version": "0.1.0",
-  "description": "Proving Ground for NuID Open Core libraries to test themselves",
-  "main": "src/nuid/proving_ground/zk.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "description": "CLI for interacting with NuID libraries and utilities",
+  "bin": {
+    "nuid-cli": "bin/nuid-cli.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NuID/proving-ground.git"
+    "url": "git+https://github.com/NuID/node-cli.git"
   },
   "author": "NuID Developers <dev@nuid.io>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/NuID/proving-ground/issues"
+    "url": "https://github.com/NuID/node-cli/issues"
   },
-  "homepage": "https://github.com/NuID/proving-ground#readme",
+  "homepage": "https://github.com/NuID/node-cli#readme",
   "dependencies": {
     "@nuid/zk": "^0.1.1",
     "commander": "^7.0.0"
