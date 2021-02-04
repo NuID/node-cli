@@ -1,0 +1,23 @@
+{
+  "name": "@nuid/proving-ground",
+  "version": "0.1.0",
+  "description": "Proving Ground for NuID Open Core libraries to test themselves",
+  "main": "src/nuid/proving_ground/zk.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NuID/proving-ground.git"
+  },
+  "author": "NuID Developers <dev@nuid.io>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NuID/proving-ground/issues"
+  },
+  "homepage": "https://github.com/NuID/proving-ground#readme",
+  "dependencies": {
+    "@nuid/zk": "^0.1.1",
+    "commander": "^7.0.0"
+  }
+}

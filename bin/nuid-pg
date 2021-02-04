@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+script_basename=/nuid/proving-ground
+if [[ ! -d $script_basename ]]; then
+    script_basename=".."
+fi
+node $script_basename/src/nuid/proving_ground/zk.js "$@"
