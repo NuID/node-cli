@@ -1,11 +1,11 @@
 <p align="right"><a href="https://nuid.io"><img src="https://nuid.io/svg/logo.svg" width="20%"></a></p>
 
-# NuID :: `node-cli`
+# NuID :: `nuid-cli`
 
-The NuID `node-cli` provides an npm package at `@nuid/cli` with CLI interfaces
-to NuID Open Core libraries like [`nuid.zk`](https://github.com/nuid/zk). We
-expect the interface to the CLI to grow over time, so all commands are organized
-with subcommands to invoke the proper functions.
+The `nuid-cli` provides an npm package at `@nuid/cli` with CLI interfaces to
+NuID Open Core libraries like [`nuid.zk`](https://github.com/nuid/zk). We expect
+the interface to grow over time, so all commands are organized with subcommands
+to invoke the proper functions.
 
 ## Install
 
@@ -37,7 +37,7 @@ nuid-cli zk verifiableFromSecret '["my secret"]'
 
 With this CLI available, you can now write full integration tests with NuID
 crypto material in languages other than JavaScript or Clojure. For example,
-in [Ruby](https://github.com/NuID/sdk-ruby):
+in [Ruby](https://github.com/NuID/sdk-ruby/blob/5b7a7da3cf1c09f30661f41b7a191e2ed700c20e/test/nuid/api/auth_test.rb#L48-L56):
 
 ``` ruby
 require "nuid-sdk"
